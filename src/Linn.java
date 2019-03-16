@@ -12,5 +12,19 @@ public class Linn {
         while ((inputLine = in.readLine()) != null)
             System.out.println(inputLine);
         in.close();
+        System.out.println();
+    }
+
+    public String getData(String url) throws Exception{
+        URL oracle = new URL(url);
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(oracle.openStream()));
+
+        String inputLine;
+        String rida = "";
+        while ((inputLine = in.readLine()) != null)
+            rida = inputLine;
+        in.close();
+        return rida;
     }
 }
