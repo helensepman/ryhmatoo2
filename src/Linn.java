@@ -13,9 +13,23 @@ public class Linn {
             System.out.println(inputLine);
         in.close();
         System.out.println();
+        Virmalised virm = new Virmalised();
+        System.out.println(virm.päikesetuul(virm.puhastatud(getData("https://services.swpc.noaa.gov/text/ace-swepam.txt"))));
+
     }
 
-    public String getData(String url) throws Exception{
+    public String[] eestiVirmalised() throws Exception{
+        String url = "https://services.swpc.noaa.gov/text/ace-swepam.txt";
+        Virmalised virmalised = new Virmalised();
+        String[] virm = virmalised.puhastatud(getData(url));
+        return virm;
+    }
+
+    public void virmalisedLinnas(String url, Linn linn) throws Exception{
+        String gurl = new String();
+    }
+
+    public static String getData(String url) throws Exception{
         URL oracle = new URL(url);
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(oracle.openStream()));
