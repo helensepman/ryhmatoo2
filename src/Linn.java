@@ -90,9 +90,9 @@ public class Linn {
     }
 
     public static String getData(String url) throws Exception{
-        URL oracle = new URL(url);
+        URL webpage = new URL(url);
         BufferedReader in = new BufferedReader(
-                new InputStreamReader(oracle.openStream()));
+                new InputStreamReader(webpage.openStream()));
 
         String inputLine;
         String rida = "";

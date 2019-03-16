@@ -6,17 +6,22 @@ public class Ilmajaam {
         System.out.println("Programm küsib linna nime ning tagastab antud linna ilmateate.\nKui sisestad sõna virmalised, saad teada, kas Eestis on hetkel lootust näha virmalisi.\nProgrammist väljumiseks kirjuta välju");
 
         while (true){
-            String sisestatakse = JOptionPane.showInputDialog(null, "Sisesta linna nimi ", "Linn",
-                    JOptionPane.QUESTION_MESSAGE);
-            if (sisestatakse.equalsIgnoreCase("välju")){
+            try{
+                String sisestatakse = JOptionPane.showInputDialog(null, "Sisesta linna nimi ", "Linn",
+                        JOptionPane.QUESTION_MESSAGE);
+                if (sisestatakse.equalsIgnoreCase("välju")){
+                    break;
+                }else if (sisestatakse.equalsIgnoreCase("virmalised")){
+                    Linn linn = new Linn("Eesti");
+                    System.out.println(linn.eestiVirmalised());
+                }else{
+                    Linn linn = new Linn(sisestatakse);
+                    System.out.println(linn);
+                }
+            }catch (NullPointerException teade){
                 break;
-            }else if (sisestatakse.equalsIgnoreCase("virmalised")){
-                Linn linn = new Linn("Eesti");
-                System.out.println(linn.eestiVirmalised());
-            }else{
-                Linn linn = new Linn(sisestatakse);
-                System.out.println(linn);
             }
+
 
 
         /*
