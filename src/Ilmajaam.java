@@ -11,12 +11,14 @@ public class Ilmajaam {
                         JOptionPane.QUESTION_MESSAGE);
                 if (sisestatakse.equalsIgnoreCase("välju")){
                     break;
-                }else if (sisestatakse.equalsIgnoreCase("virmalised")){
+                }
+                else if (sisestatakse.equalsIgnoreCase("virmalised")){
                     Linn linn = new Linn("Eesti");
                     System.out.println(linn.eestiVirmalised());
-                }else{
+                }
+                else{
                     Linn linn = new Linn(sisestatakse);
-                    System.out.println(linn);
+                    System.out.println(linn.toString());
                 }
             }catch (NullPointerException teade){
                 break;
