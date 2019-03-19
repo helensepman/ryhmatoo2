@@ -65,7 +65,7 @@ public class Linn {
                     ", temperatuur=" + String.format("%.2f",temp-273) + " C" +
                     "  õhurõhk=" + pressure + " hPa" +
                     ", õhuniiskus=" + humidity + "%"+
-                    "\nnähtavus=" + visibility + " m"+ //nähtavus kirjeldab mitme meetri kaugust asja on näha
+                    "\nnähtavus=" + visibility + " m"+ //nähtavus kirjeldab mitme meetri kaugusele on näha
                     ", tuule kiirus=" + windSpeed + " m/s" +
                     ", tuule suund=" + windDeg + " kraadi" +
                     ", pilvisus=" + clouds + "%" +
