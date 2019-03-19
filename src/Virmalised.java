@@ -41,7 +41,6 @@ public class Virmalised {
         try {
             GetData data = new GetData();
             JSONArray geoAndmed = new JSONArray(data.getData(andmed));
-            //System.out.println(geoAndmed.getJSONArray(geoAndmed.length()-1));
             this.paikesetuul = geoAndmed.getJSONArray(geoAndmed.length()-1).getDouble(1); //võetakse päikesetuule andmed
             this.magnetvali = geoAndmed.getJSONArray(geoAndmed.length()-1).getDouble(6); //võetakse magnetvälja Bz komponendi andmed
         }catch (FileNotFoundException teade){
