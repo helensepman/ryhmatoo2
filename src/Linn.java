@@ -14,6 +14,7 @@ public class Linn {
     private int visibility;
     private double windSpeed;
     private int windDeg;
+    private String tuulesuund;
     private int clouds;
     private long sunrise;
     private long sunset;
@@ -41,6 +42,7 @@ public class Linn {
             this.sunset = hetkeilm.getJSONObject("sys").getLong("sunset");
             this.dt = hetkeilm.getLong("dt");
             this.cityExict = 1;
+
         } catch (FileNotFoundException teade) {
             this.name = linn;
             this.cityExict = 0;
@@ -56,20 +58,20 @@ public class Linn {
         if (cityExict <= 0) {
             return "\n\"" + name + "\" linna ei eksisteeri";
         } else {
-            return "\nLinn{" +
-                    "lon=" + lon +
-                    ", lat=" + lat +
-                    ", ilm='" + weather+
+            return "\nLinna andmed: " +
+                    "\nidapikkus=" + lon +
+                    ", põhjalaius=" + lat +
+                    ";\nilma kirjeldus='" + weather+
                     ", temperatuur=" + String.format("%.2f",temp-273) + " C" +
-                    "\nõhurõhk=" + pressure + " hPa" +
-                    ", õhuniiskus=" + humidity +
-                    ", nähtavus=" + visibility +
+                    "  õhurõhk=" + pressure + " hPa" +
+                    ", õhuniiskus=" + humidity + "%"+
+                    "\nnähtavus=" + visibility + " m"+ //nähtavus kirjeldab mitme meetri kaugust asja on näha
                     ", tuule kiirus=" + windSpeed + " m/s" +
-                    "\nTuule suund=" + windDeg + " kraadi" +
+                    ", tuule suund=" + windDeg + " kraadi" +
                     ", pilvisus=" + clouds + "%" +
                     ", päike tõuseb=" + sdf.format(sunrise * 1000L) +
                     ", päike loojub=" + sdf.format(sunset * 1000L) +
-                    ", dt=" + sdf.format(dt * 1000L) +
+                    "\nAndmeid uuendati viimati=" + sdf.format(dt * 1000L) +
                     '}';
         }
     }
