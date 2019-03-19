@@ -1,94 +1,68 @@
-import org.json.JSONObject;
+import org.json.JSONArray;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+
 
 public class Virmalised {
+    private double paikesetuul;
+    private double magnetvali; //vaadatakse Bz ehk põhjasuunalist komponenti ainult; see peab olema negatiivne
+    private double kpIndeks;
 
-    public double[] päikesetuulMagnetväli() throws Exception{
-        double päikesetuul;
-        double magnetväli; //vaadatakse Bz ehk põhjasuunalist komponenti ainult; see peab olema negatiivne
+    public Virmalised() throws Exception{
+        paikesetuulMagnetvali();
+        kpIndeks();
+    }
 
+     public void updateVirmalised() throws Exception{
+         paikesetuulMagnetvali();
+         kpIndeks();
+    }
 
-        String andmed = String.format("https://services.swpc.noaa.gov/products/geospace/propagated-solar-wind-1-hour.json");
+    @Override
+    public String toString() {
+        String pohiinfo = "\nPäikesetuul on " + paikesetuul + " km/s, magnetväli " + magnetvali + " nT ning Kp indeks on " + kpIndeks;
+        if (magnetvali >= 0 && paikesetuul > 532) {
+            return pohiinfo + "\nGeomagneetiline aktiivsus on tõusnud, kuid kuna magnetväli on positiivne, siis ilmselt virmalisi ei näe.";
+        }else if (magnetvali<0 && (paikesetuul>393 || kpIndeks >= 4)){
+            return pohiinfo + "\nGeomagneetiline aktiivsus on tõusnud; väike tõenäosus näha virmalisi";
+        }else if (magnetvali<0 && (paikesetuul>532 || kpIndeks >= 5)){
+            return pohiinfo + "\nGeomagneetiline aktiivsus on kõrge; keskmine kuni suur tõenäosus näha virmalisi";
+        }else if (magnetvali<0 && (paikesetuul>602 || kpIndeks >= 6)){
+            return pohiinfo + "Geomagneetiline aktiivsus on väga kõrge; suur tõenäosus näha virmalisi";
+        }else{
+            return "Geomagneetiline aktiivsus on madal, virmalisi pole näha"; //default-lause kui ükski tene if lause ei sobi
+        }
+    }
+
+    private void paikesetuulMagnetvali() throws Exception{
+
+        String andmed = "https://services.swpc.noaa.gov/products/geospace/propagated-solar-wind-1-hour.json";
+
         try {
-            JSONObject GeoAndmed = new JSONObject(getData(andmed));
-            päikesetuul = Double.valueOf()//vaja saada viimase massiivi [1] elementi
-            magnetväli = Double.valueOf()//vaja saada viimase massiivi [6] elementi
-        }
-        finally { //kas siia peab midagi panema?
+            GetData data = new GetData();
+            JSONArray geoAndmed = new JSONArray(data.getData(andmed));
+            //System.out.println(geoAndmed.getJSONArray(geoAndmed.length()-1));
+            this.paikesetuul = geoAndmed.getJSONArray(geoAndmed.length()-1).getDouble(1);//vaja saada viimase massiivi [1] elementi
+            this.magnetvali = geoAndmed.getJSONArray(geoAndmed.length()-1).getDouble(6);//vaja saada viimase massiivi [6] elementi
+        }catch (FileNotFoundException teade){
+            System.out.println("Kontakteeru projekti autoritega! Solar-wind error");
         }
 
-        double[] andmeteMassiiv = {päikesetuul,magnetväli};
-        return andmeteMassiiv;
+        //double[] andmeteMassiiv = {paikesetuul,magnetvali};
+        //return andmeteMassiiv;
     }
 
-    public double kpIndeks() throws Exception{
-        double kpIndeks;
+    private void kpIndeks() throws Exception {
 
-        String andmed = String.format("https://services.swpc.noaa.gov/products/geospace/planetary-k-index-dst-1-hour.json");
+        String andmed = "https://services.swpc.noaa.gov/products/geospace/planetary-k-index-dst-1-hour.json";
         try {
-            JSONObject kpAndmed = new JSONObject(getData(andmed));
-            kpIndeks =  Double.valueOf()//viimase massiivi [1] element
-        }
-        finally {
-        } //kas siia peaks midagi tulema?
-        return kpIndeks;
-        }
-
-
-
-
-  /* public String[] puhastatud(String rida) {
-        while (rida.indexOf("  ")>0)
-            rida = rida.replaceAll("  "," ");
-        String[] uusrida = rida.split(" ");
-        return uusrida;
-    }
-
-    public String päikesetuulToString(String[] massiiv){
-        return "päikesetuule väärtus on " + massiiv[8];
-    }
-
-     public String parameetrid(){
-        double kpindeks;
-        double päikesetuul;
-
-        if (kpindeks<=3) {
-            return "Kp indeks on " + kpindeks +"\nGeomagneetiline aktiivsus on madal.";
-        }
-        if (3<kpindeks && kpindeks<5) {
-            return "Kp indeks on " + kpindeks + "\nGeomagneetiline aktiivsus on kasvanud, kuid virmaliste nägemise tõenäosus on väike.";
-        }
-        if (kpindeks >= 5) {
-            return "Kp indeks on " + kpindeks + "\nGeomagneetiline aktiivsus on kõrgendatud ning võib näha virmalisi.";
+            GetData data = new GetData();
+            JSONArray kpAndmed = new JSONArray(data.getData(andmed));
+            //System.out.println(kpAndmed.getJSONArray(kpAndmed.length()-1));
+            this.kpIndeks =  kpAndmed.getJSONArray(kpAndmed.length()-1).getDouble(1);//viimase massiivi [1] element
+        } catch (FileNotFoundException teade) {
+            System.out.println("Kontakteeru projekti autoritega! kpIndeks error");
         }
 
     }
-    /* public String virmalisteParameetrid(String virm) throws Exception {
-
-        String kpIndeksandmed = String.format("https://services.swpc.noaa.gov/products/geospace/planetary-k-index-dst-1-hour.json", virm);
-        try {
-            JSONObject kpIndeks = new JSONObject(getData(kpIndeksandmed));
-            this.name = virm;
-            this.weather = kpIndeks.getJSONObject();
-
-        }
-    }
-    public String[] eestiVirmalised() throws Exception {
-        String url = "https://services.swpc.noaa.gov/text/ace-swepam.txt";
-        Virmalised virmalised = new Virmalised();
-        String[] virm = virmalised.puhastatud(getData(url));
-        return virm;
-    }
-
-    public void virmalisedLinnas(String url, Linn linn) throws Exception {
-        String gurl = new String();
-    } */
-
-
 }

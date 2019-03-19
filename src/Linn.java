@@ -1,9 +1,6 @@
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 
 public class Linn {
@@ -26,7 +23,8 @@ public class Linn {
     public Linn(String linn) throws Exception {
         String ilmateade = String.format("http://api.openweathermap.org/data/2.5/weather?q=%s,ee&APPID=d87e964760570c1332f3d5a453769811", linn);
         try {
-            JSONObject hetkeilm = new JSONObject(getData(ilmateade));
+            GetData data = new GetData();
+            JSONObject hetkeilm = new JSONObject(data.getData(ilmateade));
 
             this.name = linn;
             this.lon = hetkeilm.getJSONObject("coord").getDouble("lon");
@@ -56,13 +54,13 @@ public class Linn {
         sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+2"));
 
         if (cityExict <= 0) {
-            return "\"" + name + "\" linna ei eksisteeri";
+            return "\n\"" + name + "\" linna ei eksisteeri";
         } else {
-            return "Linn{" +
+            return "\nLinn{" +
                     "lon=" + lon +
                     ", lat=" + lat +
                     ", ilm='" + weather+
-                    ", temperatuur=" + (Double.valueOf(temp-273)) + " C" +
+                    ", temperatuur=" + String.format("%.2f",temp-273) + " C" +
                     "\nõhurõhk=" + pressure + " hPa" +
                     ", õhuniiskus=" + humidity +
                     ", nähtavus=" + visibility +
@@ -75,43 +73,4 @@ public class Linn {
                     '}';
         }
     }
-
-
-
-    public static String getData(String url) throws Exception {
-        URL webpage = new URL(url);
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(webpage.openStream()));
-
-        String inputLine;
-        String rida = "";
-        while ((inputLine = in.readLine()) != null)
-            rida = inputLine;
-        in.close();
-        return rida;
-    }
-
-    public String eestiVirmalised() throws Exception{
-        Virmalised virmalised = new Virmalised();
-        double kpIndeks = virmalised.kpIndeks();
-        double päikesetuul = virmalised.päikesetuulMagnetväli()[0];
-        double magnetväli = virmalised.päikesetuulMagnetväli()[1];
-        String põhiinfo = "Päikesetuul on " + päikesetuul + " km/s, magnetväli " + magnetväli + " nT ning Kp indeks on " + kpIndeks;
-        if (magnetväli >= 0 && päikesetuul > 532) {
-            return põhiinfo + "\nGeomagneetiline aktiivsus on tõusnud, kuid kuna magnetväli on positiivne, siis ilmselt virmalisi ei näe.";
-        }
-        if (magnetväli<0 && (päikesetuul>393 || kpIndeks >= 4)){
-            return põhiinfo + "\nGeomagneetiline aktiivsus on tõusnud; väike tõenäosus näha virmalisi";
-        }
-        if (magnetväli<0 && (päikesetuul>532 || kpIndeks >= 5)){
-            return põhiinfo + "\nGeomagneetiline aktiivsus on kõrge; keskmine kuni suur tõenäosus näha virmalisi";
-        }
-        if (magnetväli<0 && (päikesetuul>602 || kpIndeks >= 6)){
-            return põhiinfo + "Geomagneetiline aktiivsus on väga kõrge; suur tõenäosus näha virmalisi";
-        }
-        return "Geomagneetiline aktiivsus on madal, virmalisi pole näha"; //default-lause kui ükski tene if lause ei sobi
-    }
-
-
-
 }
