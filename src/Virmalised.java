@@ -1,4 +1,5 @@
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.FileNotFoundException;
 
@@ -45,6 +46,9 @@ public class Virmalised {
             this.magnetvali = geoAndmed.getJSONArray(geoAndmed.length()-1).getDouble(6); //võetakse magnetvälja Bz komponendi andmed
         }catch (FileNotFoundException teade){
             System.out.println("Kontakteeru projekti autoritega! Solar-wind error");
+        }
+        catch (JSONException j){
+            System.out.println("Halb");
         }
     }
 
