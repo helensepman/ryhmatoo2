@@ -1,8 +1,18 @@
 
+import javafx.application.Application;
+import javafx.stage.Stage;
+
 import javax.swing.JOptionPane;
 
-public class Ilmajaam {
-    public static void main(String[] args) throws Exception {
+public class Ilmajaam extends Application {
+    public void start(Stage peaLava) throws Exception {
+        peaLava.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+    /*public static void main(String[] args) throws Exception {
         System.out.println("Programm küsib linna nime ning tagastab antud linna ilmateate." +
                 "\nKui sisestad sõna \"virmalised\", saad teada, kas Eestis on hetkel lootust näha virmalisi." +
                 "\nProgrammist väljumiseks kirjuta \"välju\"");
@@ -26,5 +36,5 @@ public class Ilmajaam {
             }
 
         }
-    }
+    }*/
 }

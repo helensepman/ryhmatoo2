@@ -18,3 +18,7 @@ application {
 javafx {
     modules = ['javafx.controls', 'javafx.fxml']
 }
+
+dependencies{
+    compile group: 'org.json', name: 'json', version: '20180813'
+}

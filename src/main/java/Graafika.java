@@ -1,108 +1,227 @@
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import javax.swing.*;
+
+
 public class Graafika extends Application {
+
     public static void main(String[] args) {
-        launch (args);
+        launch(args);
     }
+
     public void start(Stage peaLava) throws Exception {
-        BorderPane piir = new BorderPane();
-
-        /*Label label = new Label("Hetkeilma teadasaamiseks sisesta mõne Eesti linna nimi:");
-         TextField tekst = new TextField();
-        tekst.setPrefSize(80, 20); //miks see ei tööta?
-        Text lõik = new Text("See programm kasutab seda ja seda ja siia linna nime sisestades \n saad hetkelise ilmateate kätte");
-
-
-        VBox vb = new VBox();
-        vb.getChildren().addAll(label, tekst, nupp);
-        vb.setSpacing(20);
-        vb.setMaxWidth(200);
-        piir.setCenter(vb);
-        piir.setTop(lõik);*/
-        Button nupp = new Button("saada");
-
-        piir.setCenter(nupp);
-        Scene stseen1 = new Scene(piir, 400, 400);
-        peaLava.setTitle("Ilmateade");
-        peaLava.setScene(stseen1);
-        peaLava.show();
-    }
- /*   public void start(Stage peaLava) throws Exception {
-
-        BorderPane piir = new BorderPane();
 
         Label label = new Label("Hetkeilma teadasaamiseks sisesta mõne Eesti linna nimi:");
-        TextField tekst = new TextField();
-        tekst.setPrefSize(80, 20); //miks see ei tööta?
-        Text lõik = new Text("See programm kasutab seda ja seda ja siia linna nime sisestades \n saad hetkelise ilmateate kätte");
+        Label uuslinn = new Label("Linn: ");
 
-        Button nupp = new Button("saada");
+        TextField searchBox = new TextField();
+
+
+        Text tutvustus = new Text("See programm kasutab seda ja seda ja siia linna nime sisestades \n saad hetkelise ilmateate kätte");
+        Text sisu = new Text("Linna ilma info siia");
+        Text virm = new Text("Virmaliste info siia");
+
+        Button nupp = new Button("Näita");
+        Button nupp2 = new Button("Näita");
+
+        VBox vbox = new VBox();
         VBox vb = new VBox();
-        vb.getChildren().addAll(label, tekst, nupp);
-        vb.setSpacing(20);
-        vb.setMaxWidth(200);
-        piir.setCenter(vb);
-        piir.setTop(lõik);
+        HBox hb = new HBox();
+        BorderPane piir = new BorderPane();
 
-        tekst.setOnKeyPressed(new EventHandler<javafx.scene.input.KeyEvent>() {
+        Virmalised eesti = new Virmalised();
+
+        //Stseen1
+        vb.getChildren().addAll(label, searchBox, nupp);
+        vb.setSpacing(20);
+        searchBox.setMaxSize(200, 20);
+        vb.setPadding(new Insets(25, 12, 15, 12));
+        vb.setMaxWidth(300);
+
+        piir.setCenter(vb);
+        piir.setTop(tutvustus);
+        piir.setPadding(new Insets(15, 12, 15, 12));
+
+        nupp2.setOnAction(new EventHandler<ActionEvent>(){
             @Override
-            public void handle(javafx.scene.input.KeyEvent event) { //See on vaja siduda nupuvajutusega, et ta teeks sama asja
-                if(event.getCode() == KeyCode.ENTER) {
+            public void handle(ActionEvent event) {
+                try {
+                    Linn linn = new Linn(searchBox.getText());
+                    eesti.updateVirmalised();
+
+                    if (!searchBox.getText().isEmpty() & linn.getCityExict()) { //siia peaks panema selle kontrolli, et kas linn eksisteerib
+                        sisu.setText(linn.toString());
+                        virm.setText(eesti.toString());
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Linna ei sisestatud!");
+                    /*if (!vb.getChildren().contains(tühi)) {  //Tahtsin, et ta ühe korra ainult näitaks seda kui linna ei sisestatud...
+                        vb.getChildren().add(tühi);
+                    }*/
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+
+
+        });
+
+        nupp.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event){
+                try {
+                    Linn linn = new Linn(searchBox.getText());
+                    eesti.updateVirmalised();
+
+                    if (!searchBox.getText().isEmpty() & linn.getCityExict()) { //siia peaks panema selle kontrolli, et kas linn eksisteerib
+
+                        //Steen2
+                        sisu.setText(linn.toString());
+                        virm.setText(eesti.toString());
+                        hb.getChildren().addAll(uuslinn, searchBox, nupp2);
+                        hb.setSpacing(20);
+                        piir.setTop(hb);
+                        piir.setCenter(sisu);
+                        piir.setRight(virm);
+
+
+                        //linn = new Label("Sisestatud linn: " + searchBox.getText());
+
+                    /*vbox.getChildren().addAll(linn, sisu);
+                    hb.getChildren().addAll(uuslinn, searchBox);
+                    hb.setTranslateX(70);
+                    piir.setTop(hb);
+                    piir.setRight(virm);
+                    piir.setCenter(vbox);*/
+                        Scene stseen2 = new Scene(vbox, 400, 500);
+
+                        //peaLava.setScene(stseen2);
+                        //peaLava.show();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Linna ei sisestatud või linn pole saadaval!");
+                    /*if (!vb.getChildren().contains(tühi)) {  //Tahtsin, et ta ühe korra ainult näitaks seda kui linna ei sisestatud...
+                        vb.getChildren().add(tühi);
+                    }*/
+                    }
+                }catch (Exception e){
+                    System.out.println(e);
+                }
+
+            }
+        });
+
+        searchBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
                     nupp.fire();
                     event.consume();
                 }
             }
         });
 
-
-        nupp.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
-            @Override
-            public void handle(javafx.scene.input.MouseEvent event) {
-                VBox vbox = new VBox();
-                HBox hb = new HBox();
-                Label uuslinn= new Label("Sisesta uus linn: ");
-                Label linn;
-                Text sisu ;
-                Text virm;
-                if (!tekst.getText().isEmpty()) { //siia peaks panema selle kontrolli, et kas linn eksisteerib
-                    linn = new Label("Sisestatud linn: " + tekst.getText());
-                    sisu = new Text("Linna ilma info siia");
-                    virm = new Text("Virmaliste info siia");
-                    vbox.getChildren().addAll(linn, sisu);
-                    hb.getChildren().addAll(uuslinn, tekst);
-                    hb.setTranslateX(70);
-                    piir.setTop(hb);
-                    piir.setRight(virm);
-                    piir.setCenter(vbox);
-                    Scene stseen2 = new Scene(vbox, 400, 500);
-
-                    peaLava.setScene(stseen2);
-                    peaLava.show();
-                }
-                else {
-                    Label tühi = new Label("Linna ei sisestatud");
-                    if (!vb.getChildren().contains(tühi)) {  //Tahtsin, et ta ühe korra ainult näitaks seda kui linna ei sisestatud...
-                        vb.getChildren().add(tühi);
-                    }
-                }
-
-            }
-        });
-
-        Scene stseen1 = new Scene(piir, 400, 400);
+        Scene stseen1 = new Scene(piir, 700, 400);
         peaLava.setTitle("Ilmateade");
         peaLava.setScene(stseen1);
         peaLava.show();
-    } */
+    }
+    //@Override
+    /*public void start(Stage primaryStage) throws Exception {
+        BorderPane root = new BorderPane();
+
+        root.setPadding(new Insets(15, 20, 10, 10));
+
+        // TOP
+        Button btnTop = new Button("Top");
+        btnTop.setPadding(new Insets(10, 10, 10, 10));
+        root.setTop(btnTop);
+        // Set margin for top area.
+        BorderPane.setMargin(btnTop, new Insets(10, 10, 10, 10));
+
+
+        // LEFT
+        Button btnLeft = new Button("Left");
+        btnLeft.setPadding(new Insets(5, 5, 5, 5));
+        root.setLeft(btnLeft);
+        // Set margin for left area.
+        BorderPane.setMargin(btnLeft, new Insets(10, 10, 10, 10));
+
+        // CENTER
+        Button btnCenter = new Button("Center");
+        btnCenter.setPadding(new Insets(5, 5, 5, 5));
+        root.setCenter(btnCenter);
+        // Alignment.
+        BorderPane.setAlignment(btnCenter, Pos.BOTTOM_CENTER);
+
+        // RIGHT
+        Button btnRight = new Button("Right");
+        btnRight.setPadding(new Insets(5, 5, 5, 5));
+        root.setRight(btnRight);
+        // Set margin for right area.
+        BorderPane.setMargin(btnRight, new Insets(10, 10, 10, 10));
+
+        // BOTTOM
+        Button btnBottom = new Button("Bottom");
+        btnBottom.setPadding(new Insets(5, 5, 5, 5));
+        root.setBottom(btnBottom);
+        // Alignment.
+        BorderPane.setAlignment(btnBottom, Pos.TOP_RIGHT);
+
+        // Set margin for bottom area.
+        BorderPane.setMargin(btnBottom, new Insets(10, 10, 10, 10));
+
+        Scene scene = new Scene(root, 550, 250);
+
+        primaryStage.setTitle("BorderPane Layout Demo");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }*/
+
+    /*public void start(Stage peaLava) throws Exception {
+            /*BorderPane piir = new BorderPane();
+
+            Label label = new Label("Hetkeilma teadasaamiseks sisesta mõne Eesti linna nimi:");
+             TextField tekst = new TextField();
+            tekst.setPrefSize(80, 20); //miks see ei tööta?
+            Text lõik = new Text("See programm kasutab seda ja seda ja siia linna nime sisestades \n saad hetkelise ilmateate kätte");
+
+
+            VBox vb = new VBox();
+            vb.getChildren().addAll(label, tekst, nupp);
+            vb.setSpacing(20);
+            vb.setMaxWidth(200);
+            piir.setCenter(vb);
+            piir.setTop(lõik);
+            Button nupp = new Button("saada");
+
+            piir.setCenter(nupp);
+
+            BorderPane borderPane = new BorderPane();
+            //ToolBar toolbar = new ToolBar();
+            //HBox statusbar = new HBox();
+            //borderPane.setTop(toolbar);
+            //borderPane.setBottom(statusbar);
+
+            Scene stseen1 = new Scene(borderPane, 400, 400);
+            peaLava.setTitle("Ilmateade");
+            peaLava.setScene(stseen1);
+            peaLava.show();
+        }*/
 }

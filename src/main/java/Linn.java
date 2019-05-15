@@ -19,7 +19,7 @@ public class Linn {
     private long sunrise;
     private long sunset;
     private long dt; // aeg mil viimati ilmateate andmeid uuendati
-    private int cityExict;
+    private boolean cityExict;
 
     public Linn(String linn) throws Exception {
         String ilmateade = String.format("http://api.openweathermap.org/data/2.5/weather?q=%s,ee&APPID=d87e964760570c1332f3d5a453769811", linn);
@@ -41,12 +41,16 @@ public class Linn {
             this.sunrise = hetkeilm.getJSONObject("sys").getLong("sunrise");
             this.sunset = hetkeilm.getJSONObject("sys").getLong("sunset");
             this.dt = hetkeilm.getLong("dt");
-            this.cityExict = 1;
+            this.cityExict = true;
 
         } catch (FileNotFoundException teade) {
             this.name = linn;
-            this.cityExict = 0;
+            this.cityExict = false;
         }
+    }
+
+    public boolean getCityExict() {
+        return cityExict;
     }
 
     @Override
@@ -55,24 +59,23 @@ public class Linn {
         SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
         sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+2"));
 
-        if (cityExict <= 0) {
+        if (!cityExict) {
             return "\n\"" + name + "\" linna ei eksisteeri";
         } else {
             return "\nLinna andmed: " +
-                    "\nidapikkus=" + lon +
-                    ", põhjalaius=" + lat +
-                    ";\nilma kirjeldus='" + weather+
-                    ", temperatuur=" + String.format("%.2f",temp-273) + " C" +
-                    "  õhurõhk=" + pressure + " hPa" +
-                    ", õhuniiskus=" + humidity + "%"+
+                    "\n\nidapikkus=" + lon +
+                    "\npõhjalaius=" + lat +
+                    "\nilma kirjeldus='" + weather+
+                    "\ntemperatuur=" + String.format("%.2f",temp-273) + " C" +
+                    "\nõhurõhk=" + pressure + " hPa" +
+                    "\nõhuniiskus=" + humidity + "%"+
                     "\nnähtavus=" + visibility + " m"+ //nähtavus kirjeldab mitme meetri kaugusele on näha
-                    ", tuule kiirus=" + windSpeed + " m/s" +
-                    ", tuule suund=" + windDeg + " kraadi" +
-                    ", pilvisus=" + clouds + "%" +
-                    ", päike tõuseb=" + sdf.format(sunrise * 1000L) +
-                    ", päike loojub=" + sdf.format(sunset * 1000L) +
-                    "\nAndmeid uuendati viimati=" + sdf.format(dt * 1000L) +
-                    '}';
+                    "\ntuule kiirus=" + windSpeed + " m/s" +
+                    "\ntuule suund=" + windDeg + " kraadi" +
+                    "\npilvisus=" + clouds + "%" +
+                    "\npäike tõuseb=" + sdf.format(sunrise * 1000L) +
+                    "\npäike loojub=" + sdf.format(sunset * 1000L) +
+                    "\nAndmeid uuendati viimati=" + sdf.format(dt * 1000L);
         }
     }
 }
