@@ -24,7 +24,7 @@ import javax.swing.*;
 
 
 public class Graafika extends Application {
-
+    private boolean teineStseen = false;
     public static void main(String[] args) {
         launch(args);
     }
@@ -53,6 +53,8 @@ public class Graafika extends Application {
         HBox hb = new HBox();
         HBox hbox = new HBox();
         BorderPane piir = new BorderPane();
+        BorderPane piir2 = new BorderPane();
+        piir2.setPadding(new Insets(15, 12, 15, 12));
 
         Virmalised eesti = new Virmalised();
 
@@ -73,6 +75,7 @@ public class Graafika extends Application {
         piir.setTop(vbox);
         piir.setPadding(new Insets(15, 12, 15, 12));
 
+
         nupp2.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
@@ -85,11 +88,11 @@ public class Graafika extends Application {
                         virm.setText(eesti.toString());
                         searchBox.clear();
                     } else {
-                        JOptionPane.showMessageDialog(null, "Linna ei sisestatud!");
+                        JOptionPane.showMessageDialog(null, "Linna ei sisestatud või linn pole saadaval!");
                     }
                 } catch (Exception e) {
-                    throw new RuntimeException();
-                   // System.out.println(e);
+                    //throw new RuntimeException();
+                    System.out.println(e);
                 }
             }
 
@@ -120,21 +123,24 @@ public class Graafika extends Application {
                         hb.getChildren().addAll(uuslinn, searchBox, nupp2);
                         hbox.getChildren().addAll(sisu, virm);
                         hb.setSpacing(20);
-                        piir.setTop(hb);
-                        piir.setCenter(hbox);
+                        piir2.setTop(hb);
+                        piir2.setCenter(hbox);
                        // piir.setRight(virm);
-                        piir.setBottom(välju);
+                        piir2.setBottom(välju);
 
-                        Scene stseen2 = new Scene(piir, 700, 500);
+                        teineStseen = true;
+
+                        Scene stseen2 = new Scene(piir2, 700, 400);
+
 
                         peaLava.setScene(stseen2);
-                        peaLava.show();
+                        //peaLava.show();
                     } else {
                         JOptionPane.showMessageDialog(null, "Linna ei sisestatud või linn pole saadaval!");
                     }
                 }catch (Exception e){
-                    throw new RuntimeException();
-                    //System.out.println(e);
+                    //throw new RuntimeException();
+                    System.out.println(e);
                 }
 
             }
@@ -146,7 +152,10 @@ public class Graafika extends Application {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.ENTER) {
-                    nupp.fire();
+                    if (teineStseen){
+                        nupp2.fire();
+                    }
+                    else nupp.fire();
                     event.consume();
                 }
             }
