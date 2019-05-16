@@ -53,6 +53,22 @@ public class Linn {
         return cityExict;
     }
 
+    public String ilusTekst(){
+        SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+2"));
+
+        return "Linna nimi: " + name + "\nLinna asukoht: " + "idapikkus: "+ lon + "; põhjalaius: " + lat+
+                "\nTemperatuur: " + String.format("%.2f",temp-273) + " C" +
+                "\nÕhurõhk: " +pressure + " hPa" +
+                "\nÕhuniiskus: " + humidity + "%" +
+                "\nPilvisus: " + clouds + "%"+
+                "\nNähtavus: " + visibility + " meetrit" +
+                "\nPäike tõuseb: " + sdf.format(sunrise * 1000L) +
+                "\nPäike loojub: " + sdf.format(sunset * 1000L) +
+                "\n\nAndmeid uuendati viimati: " + sdf.format(dt * 1000L);
+
+    }
+
     @Override
     public String toString() {
 

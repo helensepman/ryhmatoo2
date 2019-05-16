@@ -21,17 +21,18 @@ public class Virmalised {
 
     @Override
     public String toString() {
-        String pohiinfo = "\nPäikesetuul on " + paikesetuul + " km/s, magnetväli " + magnetvali + " nT ning Kp indeks on " + kpIndeks;
+        String pohiinfo = "Hetkeinfo Virmaliste kohta Eestis:\n\nPäikesetuul: " + paikesetuul + " km/s\nMagnetvälja tugevus: "+
+                magnetvali + " nT\nKp indeks: "+kpIndeks+"\n\n";
         if (magnetvali >= 0 && paikesetuul > 532) {
-            return pohiinfo + "\nGeomagneetiline aktiivsus on tõusnud, kuid kuna magnetväli on positiivne, siis ilmselt virmalisi ei näe.";
+            return pohiinfo + "\nGeomagneetiline aktiivsus on tõusnud, aga magnetväli on positiivne; \nsuure tõenäosusega virmalisi ei näe.";
         }else if (magnetvali<0 && (paikesetuul>393 || kpIndeks >= 4)){
-            return pohiinfo + "\nGeomagneetiline aktiivsus on tõusnud; väike tõenäosus näha virmalisi";
+            return pohiinfo + "\nGeomagneetiline aktiivsus on tõusnud; \nväike tõenäosus näha virmalisi";
         }else if (magnetvali<0 && (paikesetuul>532 || kpIndeks >= 5)){
-            return pohiinfo + "\nGeomagneetiline aktiivsus on kõrge; keskmine kuni suur tõenäosus näha virmalisi";
+            return pohiinfo + "\nGeomagneetiline aktiivsus on kõrge; \nkeskmine kuni suur tõenäosus näha virmalisi";
         }else if (magnetvali<0 && (paikesetuul>602 || kpIndeks >= 6)){
-            return pohiinfo + "\nGeomagneetiline aktiivsus on väga kõrge; suur tõenäosus näha virmalisi";
+            return pohiinfo + "\nGeomagneetiline aktiivsus on väga kõrge; \nsuur tõenäosus näha virmalisi";
         }else{
-            return pohiinfo + "\nGeomagneetiline aktiivsus on madal, virmalisi pole näha"; //default-lause kui ükski teine if lause ei sobi
+            return pohiinfo + "\nGeomagneetiline aktiivsus on madal; \nvirmalisi pole näha"; //default-lause kui ükski teine if lause ei sobi
         }
     }
 

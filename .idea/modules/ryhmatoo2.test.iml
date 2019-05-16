@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="ExternalSystem" externalSystem="GRADLE" externalSystemModuleGroup="" externalSystemModuleType="sourceSet" externalSystemModuleVersion="unspecified" linkedProjectId="ryhmatoo2:test" linkedProjectPath="$MODULE_DIR$/../.." rootProjectPath="$MODULE_DIR$/../.." />
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_11">
+    <output-test url="file://$MODULE_DIR$/../../out/test/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../src/test" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="ryhmatoo2.main" />
+    <orderEntry type="library" name="Gradle: org.json:json:20180813" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-fxml:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-controls:11.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-graphics:11.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:win:11.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.openjfx:javafx-base:11.0.2" level="project" />
+  </component>
+  <component name="TestModuleProperties" production-module="ryhmatoo2.main" />
+</module>

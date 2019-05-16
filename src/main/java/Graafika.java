@@ -14,7 +14,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -28,35 +31,46 @@ public class Graafika extends Application {
 
     public void start(Stage peaLava) throws Exception {
 
-        Label label = new Label("Hetkeilma teadasaamiseks sisesta mõne Eesti linna nimi:");
-        Label uuslinn = new Label("Linn: ");
+        Text label = new Text("Hetkeilma teadasaamiseks sisesta mõne Eesti linna nimi:");
+        Label uuslinn = new Label("Sisesta uus linn: ");
 
         TextField searchBox = new TextField();
 
+        Text pealkiri = new Text("Ilmajaam");
+        pealkiri.setFont(Font.font ("Comic Sans MS", 30));
+        pealkiri.setFill(Color.GREEN);
+        Text tutvustus = new Text("See programm laseb sisestada mõne Eesti linna nime ning annab infot selle linna ilma kohta. \nLisaks antakse infot virmaliste näitajate kohta. \n\n\nLinna info kuvamiseks vajuta nuppu 'Näita' või klahvi 'ENTER'.");
 
-        Text tutvustus = new Text("See programm kasutab seda ja seda ja siia linna nime sisestades \n saad hetkelise ilmateate kätte");
         Text sisu = new Text("Linna ilma info siia");
         Text virm = new Text("Virmaliste info siia");
 
         Button nupp = new Button("Näita");
         Button nupp2 = new Button("Näita");
+        Button välju = new Button("Välju");
 
         VBox vbox = new VBox();
         VBox vb = new VBox();
         HBox hb = new HBox();
+        HBox hbox = new HBox();
         BorderPane piir = new BorderPane();
 
         Virmalised eesti = new Virmalised();
 
         //Stseen1
-        vb.getChildren().addAll(label, searchBox, nupp);
+        vb.getChildren().addAll(label, searchBox, nupp, välju);
         vb.setSpacing(20);
         searchBox.setMaxSize(200, 20);
         vb.setPadding(new Insets(25, 12, 15, 12));
         vb.setMaxWidth(300);
 
+        hbox.setSpacing(70);
+        hbox.setPadding(new Insets(50, 20, 30, 20));
+
+        vbox.getChildren().addAll(pealkiri, tutvustus);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setSpacing(20);
         piir.setCenter(vb);
-        piir.setTop(tutvustus);
+        piir.setTop(vbox);
         piir.setPadding(new Insets(15, 12, 15, 12));
 
         nupp2.setOnAction(new EventHandler<ActionEvent>(){
@@ -66,22 +80,29 @@ public class Graafika extends Application {
                     Linn linn = new Linn(searchBox.getText());
                     eesti.updateVirmalised();
 
-                    if (!searchBox.getText().isEmpty() & linn.getCityExict()) { //siia peaks panema selle kontrolli, et kas linn eksisteerib
-                        sisu.setText(linn.toString());
+                    if (!searchBox.getText().isEmpty() & linn.getCityExict()) {
+                        sisu.setText(linn.ilusTekst());
                         virm.setText(eesti.toString());
+                        searchBox.clear();
                     } else {
                         JOptionPane.showMessageDialog(null, "Linna ei sisestatud!");
-                    /*if (!vb.getChildren().contains(tühi)) {  //Tahtsin, et ta ühe korra ainult näitaks seda kui linna ei sisestatud...
-                        vb.getChildren().add(tühi);
-                    }*/
                     }
                 } catch (Exception e) {
-                    System.out.println(e);
+                    throw new RuntimeException();
+                   // System.out.println(e);
                 }
             }
 
 
         });
+
+        välju.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event){
+                peaLava.close();
+            }
+
+            });
 
         nupp.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -93,39 +114,33 @@ public class Graafika extends Application {
                     if (!searchBox.getText().isEmpty() & linn.getCityExict()) { //siia peaks panema selle kontrolli, et kas linn eksisteerib
 
                         //Steen2
-                        sisu.setText(linn.toString());
+                        searchBox.clear();
+                        sisu.setText(linn.ilusTekst());
                         virm.setText(eesti.toString());
                         hb.getChildren().addAll(uuslinn, searchBox, nupp2);
+                        hbox.getChildren().addAll(sisu, virm);
                         hb.setSpacing(20);
                         piir.setTop(hb);
-                        piir.setCenter(sisu);
-                        piir.setRight(virm);
+                        piir.setCenter(hbox);
+                       // piir.setRight(virm);
+                        piir.setBottom(välju);
 
+                        Scene stseen2 = new Scene(piir, 700, 500);
 
-                        //linn = new Label("Sisestatud linn: " + searchBox.getText());
-
-                    /*vbox.getChildren().addAll(linn, sisu);
-                    hb.getChildren().addAll(uuslinn, searchBox);
-                    hb.setTranslateX(70);
-                    piir.setTop(hb);
-                    piir.setRight(virm);
-                    piir.setCenter(vbox);*/
-                        Scene stseen2 = new Scene(vbox, 400, 500);
-
-                        //peaLava.setScene(stseen2);
-                        //peaLava.show();
+                        peaLava.setScene(stseen2);
+                        peaLava.show();
                     } else {
                         JOptionPane.showMessageDialog(null, "Linna ei sisestatud või linn pole saadaval!");
-                    /*if (!vb.getChildren().contains(tühi)) {  //Tahtsin, et ta ühe korra ainult näitaks seda kui linna ei sisestatud...
-                        vb.getChildren().add(tühi);
-                    }*/
                     }
                 }catch (Exception e){
-                    System.out.println(e);
+                    throw new RuntimeException();
+                    //System.out.println(e);
                 }
 
             }
         });
+
+
 
         searchBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
