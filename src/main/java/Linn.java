@@ -22,10 +22,18 @@ public class Linn {
     private boolean cityExict;
 
     public Linn(String linn) throws Exception {
-        String ilmateade = String.format("http://api.openweathermap.org/data/2.5/weather?q=%s,ee&APPID=d87e964760570c1332f3d5a453769811", linn);
+        String linnanimi = linn;
+        if (linnanimi.contains("õ")) linnanimi = linnanimi.replace("õ", "o");
+        if (linnanimi.contains("ä")) linnanimi = linnanimi.replace("ä", "a");
+        if (linnanimi.contains("ö")) linnanimi = linnanimi.replace("ö", "o");
+        if (linnanimi.contains("ü")) linnanimi = linnanimi.replace("ü", "u");
+
+
+        String ilmateade = String.format("http://api.openweathermap.org/data/2.5/weather?q=%s,ee&APPID=d87e964760570c1332f3d5a453769811", linnanimi);
         try {
             GetData data = new GetData();
             JSONObject hetkeilm = new JSONObject(data.getData(ilmateade));
+
 
             this.name = linn;
             this.lon = hetkeilm.getJSONObject("coord").getDouble("lon");
@@ -48,6 +56,8 @@ public class Linn {
             this.cityExict = false;
         }
     }
+
+
 
     public boolean getCityExict() {
         return cityExict;

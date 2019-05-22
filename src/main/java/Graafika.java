@@ -91,8 +91,8 @@ public class Graafika extends Application {
                         JOptionPane.showMessageDialog(null, "Linna ei sisestatud või linn pole saadaval!");
                     }
                 } catch (Exception e) {
-                    //throw new RuntimeException();
-                    System.out.println(e);
+                    throw new RuntimeException();
+                    //System.out.println(e);
                 }
             }
 
@@ -163,9 +163,18 @@ public class Graafika extends Application {
 
         Scene stseen1 = new Scene(piir, 700, 400);
         peaLava.setTitle("Ilmateade");
+        peaLava.setResizable(false);
         peaLava.setScene(stseen1);
         peaLava.show();
     }
+
+
+
+
+
+
+
+
     //@Override
     /*public void start(Stage primaryStage) throws Exception {
         BorderPane root = new BorderPane();

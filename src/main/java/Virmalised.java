@@ -49,7 +49,6 @@ public class Virmalised {
             System.out.println("Kontakteeru projekti autoritega! Solar-wind error");
         }
         catch (JSONException j){
-            System.out.println("Halb");
         }
     }
 
